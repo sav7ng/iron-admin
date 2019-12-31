@@ -1,28 +1,29 @@
 <template>
-  <div id="app">
-    <!-- <img src="./assets/logo.png" />
-    <a-button type="primary">Button</a-button> -->
-    <LOGIN />
-  </div>
+  <a-locale-provider :locale="locale">
+    <div id="app">
+      <router-view/>
+    </div>
+  </a-locale-provider>
 </template>
 
 <script>
-import LOGIN from "./components/Login.vue";
-export default {
-  name: "app",
-  components: {
-    LOGIN
-  }
-};
-</script>
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import { AppDeviceEnquire } from '@/utils/mixin'
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+export default {
+  mixins: [AppDeviceEnquire],
+  data () {
+    return {
+      locale: zhCN
+    }
+  },
+  mounted () {
+
+  }
 }
+</script>
+<style>
+  #app {
+    height: 100%;
+  }
 </style>
