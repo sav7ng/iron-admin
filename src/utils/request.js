@@ -8,7 +8,8 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 // 创建 axi
 const service = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
-  timeout: 6000 // 请求超时时间
+  timeout: 6000, // 请求超时时间
+  withCreddentials: true
 })
 console.log(process.env.VUE_APP_API_BASE_URL)
 const err = (error) => {

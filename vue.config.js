@@ -91,6 +91,7 @@ const vueConfig = {
     proxy: {
       '/api': {
         target: 'http://localhost:9777',
+        // target: 'http://47.94.222.169:9777',
         ws: false,
         changeOrigin: true,
         pathRewrite: {
