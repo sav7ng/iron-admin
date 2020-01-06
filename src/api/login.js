@@ -1,7 +1,5 @@
 import api from './index'
-import {
-  axios
-} from '@/utils/request'
+import { axios } from '@/utils/request'
 
 /**
  * login func
@@ -15,9 +13,9 @@ import {
  * @returns {*}
  */
 export function login (parameter) {
-  console.log('login:', parameter)
+
   return axios({
-    url: '/admin/users/login',
+    url: '/auth/login',
     method: 'post',
     data: parameter
   })
@@ -68,4 +66,4 @@ export function get2step (parameter) {
     method: 'post',
     data: parameter
   })
-}
+
