@@ -7,42 +7,38 @@
       :form="form"
       @submit="handleSubmit"
     >
-      <a-tabs
-        :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-        @change="handleTabClick"
-      >
-        <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="账户: admin"
-              v-decorator="[
-                'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+      <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
+      <a-form-item>
+        <a-input
+          size="large"
+          type="text"
+          placeholder="账户: admin"
+          v-decorator="[
+            'username',
+            {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+          ]"
+        >
+          <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+        </a-input>
+      </a-form-item>
 
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              autocomplete="false"
-              placeholder="密码: admin or ant.design"
-              v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+      <a-form-item>
+        <a-input
+          size="large"
+          type="password"
+          autocomplete="false"
+          placeholder="密码: admin or ant.design"
+          v-decorator="[
+            'password',
+            {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+          ]"
+        >
+          <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+        </a-input>
+      </a-form-item>
 
+      <a-row type="flex">
+        <a-col :span="12">
           <a-form-item>
             <a-checkbox
               v-decorator="[
@@ -56,17 +52,17 @@
               Remember me
             </a-checkbox>
           </a-form-item>
-
-        </a-tab-pane>
-      </a-tabs>
-
-      <a-form-item>
-        <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
-          class="forge-password"
-          style="float: right;"
-        >忘记密码</router-link>
-      </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item>
+            <router-link
+              :to="{ name: 'recover', params: { user: 'aaa'} }"
+              class="forge-password"
+              style="float: right;"
+            >忘记密码</router-link>
+          </a-form-item>
+        </a-col>
+      </a-row>
 
       <a-form-item style="margin-top:24px">
         <a-button
