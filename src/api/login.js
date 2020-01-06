@@ -13,7 +13,6 @@ import { axios } from '@/utils/request'
  * @returns {*}
  */
 export function login (parameter) {
-
   return axios({
     url: '/auth/login',
     method: 'post',
@@ -66,4 +65,4 @@ export function get2step (parameter) {
     method: 'post',
     data: parameter
   })
-
+}
