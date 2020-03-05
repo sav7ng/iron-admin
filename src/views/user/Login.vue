@@ -15,7 +15,7 @@
           placeholder="账户: admin"
           v-decorator="[
             'username',
-            {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+            {rules: [{ required: true, message: '请输入帐户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
           ]"
         >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -27,7 +27,7 @@
           size="large"
           type="password"
           autocomplete="false"
-          placeholder="密码: admin or ant.design"
+          placeholder="密码: "
           v-decorator="[
             'password',
             {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -75,19 +75,6 @@
         >确定</a-button>
       </a-form-item>
 
-      <!-- <div class="user-login-other">
-        <span>其他登录方式</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
-        <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
-      </div> -->
     </a-form>
 
   </div>
@@ -120,7 +107,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'GetInfo']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -141,7 +128,8 @@ export default {
       const {
         form: { validateFields },
         state,
-        Login
+        Login,
+        GetInfo
       } = this
 
       state.loginBtn = true
@@ -158,10 +146,14 @@ export default {
           console.log('loginParams', loginParams)
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
+            .catch((err) => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
             })
+          GetInfo()
+            .then()
+            .catch()
+            .finally()
         } else {
           setTimeout(() => {
             state.loginBtn = false
@@ -171,6 +163,16 @@ export default {
     },
     loginSuccess (res) {
       console.log(res)
+      // 账号密码错误
+      if (res.code === 400) {
+        this.isLoginError = true
+        this.$notification['error']({
+          message: '错误',
+          description: res.message || '请求出现错误，请稍后再试',
+          duration: 4
+        })
+        return
+      }
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

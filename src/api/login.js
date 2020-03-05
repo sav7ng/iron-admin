@@ -14,7 +14,7 @@ import { axios } from '@/utils/request'
  */
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
+    url: '/admin/users/login',
     method: 'post',
     data: parameter
   })
@@ -47,7 +47,7 @@ export function getCurrentUserNav (token) {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url: '/admin/users/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

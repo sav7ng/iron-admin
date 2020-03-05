@@ -2,9 +2,9 @@
   <page-view :avatar="avatar" :title="false">
     <div slot="headerContent">
       <div class="title">{{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span></div>
-      <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
+      <div style="margin-bottom: 10px;"> Iron 后台管理系统 </div>
     </div>
-    <div slot="extra">
+    <!-- <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
           <head-info title="项目" content="56" :center="false" :bordered="false"/>
@@ -16,12 +16,12 @@
           <head-info title="项目数" content="2,223" :center="false" />
         </a-col>
       </a-row>
-    </div>
+    </div> -->
 
     <div>
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card
+          <!-- <a-card
             class="project-list"
             :loading="loading"
             style="margin-bottom: 24px;"
@@ -48,7 +48,7 @@
                 </a-card>
               </a-card-grid>
             </div>
-          </a-card>
+          </a-card> -->
 
           <a-card :loading="loading" title="动态" :bordered="false">
             <a-list>
@@ -74,7 +74,7 @@
           :md="24"
           :sm="24"
           :xs="24">
-          <a-card title="快速开始 / 便捷导航" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 0}">
+          <!-- <a-card title="快速开始 / 便捷导航" style="margin-bottom: 24px" :bordered="false" :body-style="{padding: 0}">
             <div class="item-group">
               <a>操作一</a>
               <a>操作二</a>
@@ -84,13 +84,13 @@
               <a>操作六</a>
               <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
             </div>
-          </a-card>
-          <a-card title="XX 指数" style="margin-bottom: 24px" :loading="radarLoading" :bordered="false" :body-style="{ padding: 0 }">
+          </a-card> -->
+          <!-- <a-card title="XX 指数" style="margin-bottom: 24px" :loading="radarLoading" :bordered="false" :body-style="{ padding: 0 }">
             <div style="min-height: 400px;">
-              <!-- :scale="scale" :axis1Opts="axis1Opts" :axis2Opts="axis2Opts"  -->
+              :scale="scale" :axis1Opts="axis1Opts" :axis2Opts="axis2Opts"
               <radar :data="radarData" />
             </div>
-          </a-card>
+          </a-card> -->
           <a-card :loading="loading" title="团队" :bordered="false">
             <div class="members">
               <a-row>
@@ -117,9 +117,9 @@ import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 
-import { getRoleList, getServiceList } from '@/api/manage'
+// import { getRoleList, getServiceList } from '@/api/manage'
 
-const DataSet = require('@antv/data-set')
+// const DataSet = require('@antv/data-set')
 
 export default {
   name: 'Workplace',
@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     ...mapState({
-      nickname: (state) => state.user.nickname,
+      nickname: (state) => state.user.name,
       welcome: (state) => state.user.welcome
     }),
     userInfo () {
@@ -192,28 +192,28 @@ export default {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
 
-    getRoleList().then(res => {
-      // console.log('workplace -> call getRoleList()', res)
-    })
+    // getRoleList().then(res => {
+    //   // console.log('workplace -> call getRoleList()', res)
+    // })
 
-    getServiceList().then(res => {
-      // console.log('workplace -> call getServiceList()', res)
-    })
+    // getServiceList().then(res => {
+    //   // console.log('workplace -> call getServiceList()', res)
+    // })
   },
   mounted () {
-    this.getProjects()
-    this.getActivity()
-    this.getTeams()
-    this.initRadar()
+    // this.getProjects()
+    // this.getActivity()
+    // this.getTeams()
+    // this.initRadar()
   },
   methods: {
-    getProjects () {
-      this.$http.get('/list/search/projects')
-        .then(res => {
-          this.projects = res.result && res.result.data
-          this.loading = false
-        })
-    },
+    // getProjects () {
+    //   this.$http.get('/list/search/projects')
+    //     .then(res => {
+    //       this.projects = res.result && res.result.data
+    //       this.loading = false
+    //     })
+    // },
     getActivity () {
       this.$http.get('/workplace/activity')
         .then(res => {
@@ -225,24 +225,24 @@ export default {
         .then(res => {
           this.teams = res.result
         })
-    },
-    initRadar () {
-      this.radarLoading = true
-
-      this.$http.get('/workplace/radar')
-        .then(res => {
-          const dv = new DataSet.View().source(res.result)
-          dv.transform({
-            type: 'fold',
-            fields: ['个人', '团队', '部门'],
-            key: 'user',
-            value: 'score'
-          })
-
-          this.radarData = dv.rows
-          this.radarLoading = false
-        })
     }
+    // initRadar () {
+    //   this.radarLoading = true
+
+    //   this.$http.get('/workplace/radar')
+    //     .then(res => {
+    //       const dv = new DataSet.View().source(res.result)
+    //       dv.transform({
+    //         type: 'fold',
+    //         fields: ['个人', '团队', '部门'],
+    //         key: 'user',
+    //         value: 'score'
+    //       })
+
+    //       this.radarData = dv.rows
+    //       this.radarLoading = false
+    //     })
+    // }
   }
 }
 </script>
