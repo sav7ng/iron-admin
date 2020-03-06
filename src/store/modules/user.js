@@ -41,6 +41,7 @@ const user = {
           if (result.code === 200) {
             Vue.ls.set(ACCESS_TOKEN, result.data.accessToken, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', result.data.accessToken)
+            localStorage.setItem('ACCESS_TOKEN', result.data.accessToken)
           }
           resolve(result)
         }).catch(error => {
@@ -69,7 +70,6 @@ const user = {
           // } else {
           //   reject(new Error('getInfo: roles must be a non-null array !'))
           // }
-
           commit('SET_NAME', { name: result.username, welcome: welcome() })
           commit('SET_AVATAR', 'http://yanxuan.nosdn.127.net/f5acb95728b299df2636cfe7af6d6282.png')
 

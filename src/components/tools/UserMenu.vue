@@ -63,9 +63,7 @@ export default {
         content: '真的要注销登录吗 ?',
         onOk: () => {
           return this.Logout({}).then(() => {
-            setTimeout(() => {
-              window.location.reload()
-            }, 16)
+            this.$router.replace({ path: '/user' })
           }).catch(err => {
             this.$message.error({
               title: '错误',

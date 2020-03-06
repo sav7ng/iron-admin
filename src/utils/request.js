@@ -4,6 +4,7 @@ import store from '@/store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import router from '@/router/index'
 
 // 创建 axi
 const service = axios.create({
@@ -51,7 +52,22 @@ service.interceptors.request.use(config => {
 
 // response interceptor
 service.interceptors.response.use((response) => {
-  return response.data
+  const result = response.data
+  const token = Vue.ls.get(ACCESS_TOKEN)
+  // console.log(result)
+  if (result.code === 401) {
+    router.replace({
+      path: '/user'
+    })
+    notification.error({
+      message: 'Unauthorized',
+      description: 'Authorization verification failed'
+    })
+    if (token) {
+      store.dispatch('Logout').then(() => { })
+    }
+  }
+  return result
 }, err)
 
 const installer = {

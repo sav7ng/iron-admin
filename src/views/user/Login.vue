@@ -128,8 +128,7 @@ export default {
       const {
         form: { validateFields },
         state,
-        Login,
-        GetInfo
+        Login
       } = this
 
       state.loginBtn = true
@@ -150,10 +149,6 @@ export default {
             .finally(() => {
               state.loginBtn = false
             })
-          GetInfo()
-            .then()
-            .catch()
-            .finally()
         } else {
           setTimeout(() => {
             state.loginBtn = false
@@ -162,6 +157,12 @@ export default {
       })
     },
     loginSuccess (res) {
+      const { GetInfo } = this
+
+      GetInfo()
+        .then()
+        .catch()
+        .finally()
       console.log(res)
       // 账号密码错误
       if (res.code === 400) {
@@ -173,6 +174,7 @@ export default {
         })
         return
       }
+
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
