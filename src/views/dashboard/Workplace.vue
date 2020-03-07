@@ -6,14 +6,74 @@
     </div>
 
     <div>
-      <a-row :gutter="24">
-        <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" title="动态" :bordered="false">
-            <a-list>
-              {{ tokenInfo }}
-            </a-list>
-          </a-card>
+      <a-row :gutter="24" >
+        <a-col
+          :xl="6"
+          :lg="6"
+          :md="12"
+          :sm="12"
+          :xs="12"
+          :style="{ marginBottom: '24px' }">
+          <!-- <a-card :loading="loading" :bordered="false" :span="8">
+            <p>{{ tokenInfo }}</p>
+          <p>用户总数</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          </a-card> -->
+          <analysis-card
+            :loading="loading"
+            title="用户总数"
+            :number="12345"
+          >
+            <!-- <router-link
+              :to="{ name:'PostList' }"
+              slot="action"
+            > -->
+            <!-- <a-icon type="link" /> -->
+            <!-- </router-link> -->
+          </analysis-card>
+        </a-col>
 
+        <a-col
+          :xl="6"
+          :lg="6"
+          :md="12"
+          :sm="12"
+          :xs="12"
+          :style="{ marginBottom: '24px' }">
+          <a-card :loading="loading" :bordered="false" :span="8">
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </a-card>
+        </a-col>
+
+        <a-col
+          :xl="6"
+          :lg="6"
+          :md="12"
+          :sm="12"
+          :xs="12"
+          :style="{ marginBottom: '24px' }">
+          <a-card :loading="loading" :bordered="false" :span="8">
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </a-card>
+        </a-col>
+
+        <a-col
+          :xl="6"
+          :lg="6"
+          :md="12"
+          :sm="12"
+          :xs="12"
+          :style="{ marginBottom: '24px' }">
+          <a-card :loading="loading" :bordered="false" :span="8">
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </a-card>
         </a-col>
       </a-row>
     </div>
@@ -23,6 +83,7 @@
 <script>
 import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
+import AnalysisCard from './components/AnalysisCard'
 
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
@@ -37,12 +98,12 @@ export default {
   components: {
     PageView,
     HeadInfo,
-    Radar
+    Radar,
+    AnalysisCard
   },
   data () {
     return {
       timeFix: timeFix(),
-      avatar: '',
       user: {},
 
       loading: true,
@@ -53,7 +114,8 @@ export default {
   computed: {
     ...mapState({
       nickname: (state) => state.user.name,
-      welcome: (state) => state.user.welcome
+      welcome: (state) => state.user.welcome,
+      avatar: (state) => state.user.avatar
     })
   },
   created () {
