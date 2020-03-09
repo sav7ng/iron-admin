@@ -6,31 +6,25 @@
     </div>
 
     <div>
-      <a-row :gutter="24" >
+      <a-row :gutter="16" >
         <a-col
           :xl="6"
           :lg="6"
           :md="12"
           :sm="12"
           :xs="12"
-          :style="{ marginBottom: '24px' }">
-          <!-- <a-card :loading="loading" :bordered="false" :span="8">
-            <p>{{ tokenInfo }}</p>
-          <p>用户总数</p>
-          <p>Card content</p>
-          <p>Card content</p>
-          </a-card> -->
+          :style="{ marginBottom: '16px' }">
           <analysis-card
-            :loading="loading"
+            :loading="userTotalLoading"
             title="用户总数"
-            :number="12345"
+            :number="userTotal"
           >
-            <!-- <router-link
+            <router-link
               :to="{ name:'PostList' }"
               slot="action"
-            > -->
-            <!-- <a-icon type="link" /> -->
-            <!-- </router-link> -->
+            >
+              <a-icon type="link" />
+            </router-link>
           </analysis-card>
         </a-col>
 
@@ -40,12 +34,19 @@
           :md="12"
           :sm="12"
           :xs="12"
-          :style="{ marginBottom: '24px' }">
-          <a-card :loading="loading" :bordered="false" :span="8">
-            <p>Card content</p>
-            <p>Card content</p>
-            <p>Card content</p>
-          </a-card>
+          :style="{ marginBottom: '16px' }">
+          <analysis-card
+            :loading="loading"
+            title="作品总数"
+            :number="34125"
+          >
+            <router-link
+              :to="{ name:'PostList' }"
+              slot="action"
+            >
+              <a-icon type="link" />
+            </router-link>
+          </analysis-card>
         </a-col>
 
         <a-col
@@ -54,12 +55,21 @@
           :md="12"
           :sm="12"
           :xs="12"
-          :style="{ marginBottom: '24px' }">
-          <a-card :loading="loading" :bordered="false" :span="8">
-            <p>Card content</p>
-            <p>Card content</p>
-            <p>Card content</p>
-          </a-card>
+          :style="{ marginBottom: '16px' }">
+          <analysis-card
+            :loading="loading"
+            title="访问量"
+            :number="22222314"
+          >
+            <a-tooltip slot="action">
+              <template slot="title">
+                文章阅读共 {{ 22222314 }} 次
+              </template>
+              <a href="javascript:void(0);">
+                <a-icon type="info-circle-o" />
+              </a>
+            </a-tooltip>
+          </analysis-card>
         </a-col>
 
         <a-col
@@ -68,13 +78,21 @@
           :md="12"
           :sm="12"
           :xs="12"
-          :style="{ marginBottom: '24px' }">
-          <a-card :loading="loading" :bordered="false" :span="8">
-            <p>Card content</p>
-            <p>Card content</p>
-            <p>Card content</p>
-          </a-card>
+          :style="{ marginBottom: '16px' }">
+          <analysis-card
+            :loading="loading"
+            title="建立天数"
+            :number="123"
+          >
+            <a-tooltip slot="action">
+              <template slot="title">博客建立于 xxxx</template>
+              <a href="javascript:void(0);">
+                <a-icon type="info-circle-o" />
+              </a>
+            </a-tooltip>
+          </analysis-card>
         </a-col>
+
       </a-row>
     </div>
   </page-view>
@@ -107,7 +125,9 @@ export default {
       user: {},
 
       loading: true,
-      tokenInfo: ''
+      userTotalLoading: true,
+      tokenInfo: '',
+      userTotal: 0
 
     }
   },
@@ -119,10 +139,10 @@ export default {
     })
   },
   created () {
-
   },
   mounted () {
     this.getByToken()
+    this.getUserTotal()
   },
   methods: {
     getByToken () {
@@ -130,6 +150,14 @@ export default {
         // debugger
         this.tokenInfo = res || '空'
         this.loading = false
+      }, res => {
+
+      })
+    },
+    getUserTotal () {
+      this.$http.get('/admin/dashboard/getDashboard').then(res => {
+        this.userTotal = res.data.userTotal || 0
+        this.userTotalLoading = false
       }, res => {
 
       })
