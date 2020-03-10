@@ -20,7 +20,7 @@
             :number="userTotal"
           >
             <router-link
-              :to="{ name:'PostList' }"
+              :to="{ name:'BaseForm' }"
               slot="action"
             >
               <a-icon type="link" />
@@ -41,7 +41,7 @@
             :number="34125"
           >
             <router-link
-              :to="{ name:'PostList' }"
+              :to="{ name:'BaseForm' }"
               slot="action"
             >
               <a-icon type="link" />
@@ -141,10 +141,14 @@ export default {
   created () {
   },
   mounted () {
+    this.init()
     this.getByToken()
     this.getUserTotal()
   },
   methods: {
+    init () {
+      this.$store.dispatch('GetInfo')
+    },
     getByToken () {
       this.$http.get('/admin/users/getByToken').then(res => {
         // debugger

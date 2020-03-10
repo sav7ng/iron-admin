@@ -11,10 +11,13 @@ const isProd = process.env.NODE_ENV === 'production'
 const assetsCDN = {
   // webpack build externals
   externals: {
-    vue: 'Vue',
-    'vue-router': 'VueRouter',
-    vuex: 'Vuex',
-    axios: 'axios'
+    // vue: 'Vue',
+    // 'vue-router': 'VueRouter',
+    // vuex: 'Vuex',
+    // axios: 'axios'
+    Vue: 'Vue',
+    'VueRouter': 'VueRouter',
+    Vuex: 'Vuex'
   },
   css: [],
   // https://unpkg.com/browse/vue@2.6.10/
@@ -94,6 +97,7 @@ const vueConfig = {
         target: 'https://api.aimei66.cn',
         ws: false,
         changeOrigin: true,
+        // logLevel: 'debug',
         pathRewrite: {
           '^/api': '/iron/api'
         }

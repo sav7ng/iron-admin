@@ -41,7 +41,7 @@ const user = {
           if (result.code === 200) {
             Vue.ls.set(ACCESS_TOKEN, result.data.accessToken, 7 * 24 * 60 * 60 * 1000)
             commit('SET_TOKEN', result.data.accessToken)
-            localStorage.setItem('ACCESS_TOKEN', result.data.accessToken)
+            // localStorage.setItem('ACCESS_TOKEN', result.data.accessToken)
           }
           resolve(result)
         }).catch(error => {
