@@ -71,7 +71,7 @@ const user = {
           //   reject(new Error('getInfo: roles must be a non-null array !'))
           // }
           commit('SET_NAME', { name: result.username, welcome: welcome() })
-          commit('SET_AVATAR', 'http://yanxuan.nosdn.127.net/f5acb95728b299df2636cfe7af6d6282.png')
+          commit('SET_AVATAR', 'https://yanxuan.nosdn.127.net/f5acb95728b299df2636cfe7af6d6282.png')
 
           resolve(response)
         }).catch(error => {

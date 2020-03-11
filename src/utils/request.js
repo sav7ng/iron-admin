@@ -53,7 +53,7 @@ service.interceptors.request.use(config => {
 // response interceptor
 service.interceptors.response.use((response) => {
   const result = response.data
-  const token = Vue.ls.get(ACCESS_TOKEN)
+  // const token = Vue.ls.get(ACCESS_TOKEN)
   // console.log(result)
   if (result.code === 401) {
     router.replace({
@@ -63,9 +63,7 @@ service.interceptors.response.use((response) => {
       message: 'Unauthorized',
       description: 'Authorization verification failed'
     })
-    if (token) {
-      store.dispatch('Logout').then(() => { })
-    }
+    store.dispatch('Logout').then(() => { })
   }
   return result
 }, err)
