@@ -26,14 +26,14 @@ const err = (error) => {
     if (error.response.status === 401) {
     // if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+        message: '未经授权',
+        description: '授权验证失败'
       })
       if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
+        store.dispatch('ClearToken').then(() => {
+          // setTimeout(() => {
+          window.location.reload()
+          // }, 800)
         })
       }
     }
@@ -60,10 +60,12 @@ service.interceptors.response.use((response) => {
       path: '/user'
     })
     notification.error({
-      message: 'Unauthorized',
-      description: 'Authorization verification failed'
+      message: '未经授权',
+      description: '授权验证失败'
     })
-    store.dispatch('Logout').then(() => { })
+    store.dispatch('ClearToken').then(() => {
+      window.location.reload()
+    })
   }
   return result
 }, err)

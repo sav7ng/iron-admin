@@ -64,6 +64,11 @@ export default {
         onOk: () => {
           return this.Logout({}).then(() => {
             this.$router.replace({ path: '/user' })
+            this.$notification.success({
+              message: '提示',
+              description: `退出成功`,
+              duration: 2
+            })
           }).catch(err => {
             this.$message.error({
               title: '错误',

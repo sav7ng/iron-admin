@@ -93,6 +93,16 @@ const user = {
           Vue.ls.remove(ACCESS_TOKEN)
         })
       })
+    },
+
+    // 清除Token
+    ClearToken ({ commit, state }) {
+      return new Promise((resolve) => {
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        Vue.ls.remove(ACCESS_TOKEN)
+        resolve()
+      })
     }
 
   }

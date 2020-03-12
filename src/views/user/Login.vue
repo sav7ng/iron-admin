@@ -180,7 +180,8 @@ export default {
       setTimeout(() => {
         this.$notification.success({
           message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
+          description: `${timeFix()}，欢迎回来`,
+          duration: 2
         })
       }, 1000)
       this.isLoginError = false
