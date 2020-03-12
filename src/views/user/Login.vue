@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <!-- <div class="main">
     <a-form
       id="formLogin"
       class="user-layout-login"
@@ -77,6 +77,81 @@
 
     </a-form>
 
+  </div> -->
+  <div class="container-wrapper">
+    <div class="halo-logo animated fadeInUp">
+      <span>iRON</span>
+    </div>
+    <div
+      class="login-form animated"
+    >
+      <a-form
+        layout="vertical"
+        @keyup.enter.native="handleLogin"
+      >
+        <a-form-item
+          class="animated fadeInUp"
+          :style="{'animation-delay': '0.1s'}"
+        >
+          <a-input
+            placeholder="用户名/邮箱"
+            v-model="username"
+          >
+            <a-icon
+              slot="prefix"
+              type="user"
+              style="color: rgba(0,0,0,.25)"
+            />
+          </a-input>
+        </a-form-item>
+        <a-form-item
+          class="animated fadeInUp"
+          :style="{'animation-delay': '0.2s'}"
+        >
+          <a-input
+            v-model="password"
+            type="password"
+            placeholder="密码"
+          >
+            <a-icon
+              slot="prefix"
+              type="lock"
+              style="color: rgba(0,0,0,.25)"
+            />
+          </a-input>
+        </a-form-item>
+
+        <!-- <a-row type="flex">
+          <a-form-item>
+            <a-checkbox
+              v-decorator="[
+                'rememberMe',
+                {
+                  valuePropName: 'checked',
+                  initialValue: true,
+                },
+              ]"
+            >
+              Remember Me
+            </a-checkbox>
+          </a-form-item>
+        </a-row> -->
+
+        <a-form-item
+          class="animated fadeInUp"
+          :style="{'animation-delay': '0.3s'}"
+        >
+          <a-button
+            :loading="landing"
+            type="primary"
+            :block="true"
+            @click="handleLogin"
+          >登录</a-button>
+        </a-form-item>
+
+      </a-form>
+    </div>
+
   </div>
 </template>
 
@@ -103,7 +178,15 @@ export default {
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
         smsSendBtn: false
-      }
+      },
+
+      username: null,
+      password: null,
+      apiModifyVisible: false,
+      defaultApiBefore: window.location.protocol + '//',
+      apiUrl: window.location.host,
+      resetPasswordButton: false,
+      landing: false
     }
   },
   methods: {
