@@ -1,8 +1,9 @@
 <template>
   <div class="logo">
     <router-link :to="{name:'dashboard'}">
-      <LogoSvg alt="logo" />
-      <h1 v-if="showTitle">{{ title }}</h1>
+      <!-- <LogoSvg alt="logo" /> -->
+      <h1 class="iron-logo" v-if="showTitle">iRON</h1>
+      <h1 v-if="showTitle" :style="{'padding-left': '10px'}">Dashboard</h1>
     </router-link>
   </div>
 </template>
@@ -18,7 +19,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'iRON Manage',
+      default: 'iRON    Dashboard',
       required: false
     },
     showTitle: {
