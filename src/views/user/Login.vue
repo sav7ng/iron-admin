@@ -1,97 +1,18 @@
 <template>
-  <!-- <div class="main">
-    <a-form
-      id="formLogin"
-      class="user-layout-login"
-      ref="formLogin"
-      :form="form"
-      @submit="handleSubmit"
-    >
-      <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/ant.design )" />
-      <a-form-item>
-        <a-input
-          size="large"
-          type="text"
-          placeholder="账户: admin"
-          v-decorator="[
-            'username',
-            {rules: [{ required: true, message: '请输入帐户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
-          ]"
-        >
-          <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-        </a-input>
-      </a-form-item>
 
-      <a-form-item>
-        <a-input
-          size="large"
-          type="password"
-          autocomplete="false"
-          placeholder="密码: "
-          v-decorator="[
-            'password',
-            {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-          ]"
-        >
-          <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-        </a-input>
-      </a-form-item>
-
-      <a-row type="flex">
-        <a-col :span="12">
-          <a-form-item>
-            <a-checkbox
-              v-decorator="[
-                'rememberMe',
-                {
-                  valuePropName: 'checked',
-                  initialValue: true,
-                },
-              ]"
-            >
-              Remember me
-            </a-checkbox>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item>
-            <router-link
-              :to="{ name: 'recover', params: { user: 'aaa'} }"
-              class="forge-password"
-              style="float: right;"
-            >忘记密码</router-link>
-          </a-form-item>
-        </a-col>
-      </a-row>
-
-      <a-form-item style="margin-top:24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-          :disabled="state.loginBtn"
-        >确定</a-button>
-      </a-form-item>
-
-    </a-form>
-
-  </div> -->
   <div class="container-wrapper">
-    <div class="halo-logo animated fadeInUp">
+    <div class="iron-logo animated fadeInUp">
       <span>iRON</span>
     </div>
     <div
       class="login-form animated"
     >
       <a-form
-        layout="vertical"
         @keyup.enter.native="handleLogin"
       >
         <a-form-item
           class="animated fadeInUp"
-          :style="{'animation-delay': '0.1s'}"
+          :style="{'animation-delay': '0.2s'}"
         >
           <a-input
             placeholder="用户名/邮箱"
@@ -106,7 +27,7 @@
         </a-form-item>
         <a-form-item
           class="animated fadeInUp"
-          :style="{'animation-delay': '0.2s'}"
+          :style="{'animation-delay': '0.4s'}"
         >
           <a-input
             v-model="password"
@@ -121,25 +42,28 @@
           </a-input>
         </a-form-item>
 
-        <!-- <a-row type="flex">
-          <a-form-item>
-            <a-checkbox
-              v-decorator="[
-                'rememberMe',
-                {
-                  valuePropName: 'checked',
-                  initialValue: true,
-                },
-              ]"
+        <a-row type="flex" justify="space-between">
+          <a-col>
+            <a-form-item
+              class="animated fadeInUp"
+              :style="{'animation-delay': '0.6s'}"
             >
+              <a-switch
+                defaultChecked
+                v-model="rememberMe"
+                :style="{'animation-delay': '0.6s',
+                         'margin-right': '10px'}">
+                         <!-- <a-icon type="check" slot="checkedChildren" />
+                <a-icon type="close" slot="unCheckedChildren" /> -->
+              </a-switch>
               Remember Me
-            </a-checkbox>
-          </a-form-item>
-        </a-row> -->
+            </a-form-item>
+          </a-col>
+        </a-row>
 
         <a-form-item
           class="animated fadeInUp"
-          :style="{'animation-delay': '0.3s'}"
+          :style="{'animation-delay': '0.8s'}"
         >
           <a-button
             :loading="landing"
@@ -164,81 +88,42 @@ export default {
   },
   data () {
     return {
-      customActiveKey: 'tab1',
       loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
-      isLoginError: false,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
-      form: this.$form.createForm(this),
-      state: {
-        time: 60,
-        loginBtn: false,
-        // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
-        smsSendBtn: false
-      },
-
       username: null,
       password: null,
-      apiModifyVisible: false,
-      defaultApiBefore: window.location.protocol + '//',
-      apiUrl: window.location.host,
-      resetPasswordButton: false,
-      landing: false
+      landing: false,
+      rememberMe: true
     }
   },
   methods: {
+
     ...mapActions(['Login', 'Logout', 'GetInfo']),
-    // handler
-    handleUsernameOrEmail (rule, value, callback) {
-      const { state } = this
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-      if (regex.test(value)) {
-        state.loginType = 0
-      } else {
-        state.loginType = 1
-      }
-      callback()
-    },
-    handleTabClick (key) {
-      this.customActiveKey = key
-      // this.form.resetFields()
-    },
-    handleSubmit (e) {
-      e.preventDefault()
+
+    handleLogin () {
       const {
-        form: { validateFields },
-        state,
         Login
       } = this
 
-      state.loginBtn = true
+      if (!this.username) {
+        this.$message.warn('用户名不能为空！')
+        return
+      }
 
-      const validateFieldsKey = ['username', 'password', 'rememberMe']
+      if (!this.password) {
+        this.$message.warn('密码不能为空！')
+        return
+      }
 
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          console.log('login form', values)
-          const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          // loginParams.password = md5(values.password)
-          console.log('loginParams', loginParams)
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
-            .catch((err) => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
-        }
-      })
+      this.landing = true
+
+      Login({ username: this.username, password: this.password, rememberMe: this.rememberMe })
+        .then((res) => this.loginSuccess(res))
+        .catch((err) => this.requestFailed(err))
+        .finally(() => {
+          this.loginBtn = false
+        })
     },
+
     loginSuccess (res) {
       const { GetInfo } = this
 
@@ -269,6 +154,7 @@ export default {
       }, 1000)
       this.isLoginError = false
     },
+
     requestFailed (err) {
       this.isLoginError = true
       this.$notification['error']({
@@ -277,7 +163,9 @@ export default {
         duration: 4
       })
     }
+
   }
+
 }
 </script>
 

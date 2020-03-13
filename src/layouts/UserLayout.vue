@@ -1,7 +1,7 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
     <div class="container">
-      <div class="top">
+      <!-- <div class="top">
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
@@ -11,16 +11,16 @@
         <div class="desc">
           Power By Ant Design And 爱敲代码的猫
         </div>
-      </div>
+      </div> -->
 
       <route-view></route-view>
 
       <div class="footer">
-        <div class="links">
+        <!-- <div class="links">
           <a href="#">帮助</a>
           <a href="#">隐私</a>
           <a href="#">条款</a>
-        </div>
+        </div> -->
         <div class="copyright">
           Copyright &copy; 2020 爱敲代码的猫
         </div>
@@ -66,7 +66,9 @@ export default {
       width: 100%;
       min-height: 100%;
       // background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
-      background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
+      // background: #d50000;
+      background: #ffffff;
+      // background-image: linear-gradient(-30deg,  #E3170D 0%, #FFD700 100%);
       background-size: 100%;
       padding: 110px 0 144px;
       position: relative;
