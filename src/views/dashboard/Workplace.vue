@@ -38,7 +38,7 @@
           <analysis-card
             :loading="loading"
             title="作品总数"
-            :number="34125"
+            :number="userProductionTotal"
           >
             <router-link
               :to="{ name:'BaseForm' }"
@@ -58,12 +58,12 @@
           :style="{ marginBottom: '16px' }">
           <analysis-card
             :loading="loading"
-            title="访问量"
-            :number="22222314"
+            title="总访问量"
+            :number="userBrowserLogTotal"
           >
             <a-tooltip slot="action">
               <template slot="title">
-                文章阅读共 {{ 22222314 }} 次
+                专辑总访问共 {{ userBrowserLogTotal }} 次
               </template>
               <a href="javascript:void(0);">
                 <a-icon type="info-circle-o" />
@@ -81,11 +81,12 @@
           :style="{ marginBottom: '16px' }">
           <analysis-card
             :loading="loading"
-            title="建立天数"
-            :number="123"
+            title="交易流水"
+            :number="totalFlow"
+            :decimals="2"
           >
             <a-tooltip slot="action">
-              <template slot="title">博客建立于 xxxx</template>
+              <template slot="title">用户充值总金额</template>
               <a href="javascript:void(0);">
                 <a-icon type="info-circle-o" />
               </a>
@@ -127,8 +128,10 @@ export default {
       loading: true,
       userTotalLoading: true,
       tokenInfo: '',
-      userTotal: 0
-
+      userTotal: 0,
+      userBrowserLogTotal: 0,
+      userProductionTotal: 0,
+      totalFlow: 0
     }
   },
   computed: {
@@ -161,6 +164,9 @@ export default {
     getUserTotal () {
       this.$http.get('/admin/dashboard/getDashboard').then(res => {
         this.userTotal = res.data.userTotal || 0
+        this.userBrowserLogTotal = res.data.userBrowserLogTotal || 0
+        this.userProductionTotal = res.data.userProductionTotal || 0
+        this.totalFlow = res.data.totalFlow || 0
         this.userTotalLoading = false
       }, res => {
 

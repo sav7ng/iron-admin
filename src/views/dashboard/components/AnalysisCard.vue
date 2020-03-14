@@ -17,6 +17,7 @@
         <slot name="number">
           <countTo
             :startVal="startNumber"
+            :decimals="decimals"
             :endVal="typeof number === 'function' && number() || number"
             :duration="3000"
             :autoplay="true"
@@ -49,6 +50,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    decimals: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   data () {
