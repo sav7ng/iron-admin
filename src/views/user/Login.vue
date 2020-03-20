@@ -131,7 +131,6 @@ export default {
         .then()
         .catch()
         .finally()
-      console.log(res)
       // 账号密码错误
       if (res.code === 400) {
         this.isLoginError = true
