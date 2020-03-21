@@ -54,8 +54,12 @@ export default {
   data () {
     return {
       loading: false,
-      visible: false
+      visible: false,
+      msg: ''
     }
+  },
+  created () {
+    this.init()
   },
   methods: {
     fetchNotice () {
@@ -68,6 +72,12 @@ export default {
         this.loading = false
       }
       this.visible = !this.visible
+    },
+    init () {
+      this.sockets.subscribe('topic', (data) => {
+        console.log(data)
+        this.msg = data.message
+      })
     }
   }
 }
