@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import SockJS from 'sockjs-client'
+import Stomp from 'webstomp-client'
 export default {
   name: 'HeaderNotice',
   data () {
@@ -58,7 +60,8 @@ export default {
       msg: ''
     }
   },
-  created () {
+  mounted () {
+    this.initWebSocket()
   },
   methods: {
     fetchNotice () {
@@ -71,6 +74,20 @@ export default {
         this.loading = false
       }
       this.visible = !this.visible
+    },
+    initWebSocket () {
+      this.connection()
+    },
+    connection () {
+      const socket = new SockJS('http://localhost:9777/iron/webSocket')
+      this.stompClient = Stomp.over(socket)
+      this.stompClient.connect({}, (frame) => {
+        console.log(frame)
+        this.stompClient.subscribe('/topic/news', (val) => {
+          console.log('-------++++++++++++++++++++++++++++++------------')
+          console.log(val.body)
+        })
+      })
     }
   }
 }
