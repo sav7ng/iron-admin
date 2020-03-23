@@ -101,11 +101,6 @@ const vueConfig = {
         pathRewrite: {
           '^/api': '/iron/api'
         }
-      },
-      '/socket.io': {
-        target: 'http://localhost:9777', // target host
-        changeOrigin: true, // needed for virtual hosted sites
-        logLevel: 'debug'
       }
     }
   },

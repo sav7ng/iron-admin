@@ -7,8 +7,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
-import VueSocketIO from 'vue-socket.io'
-import SocketIO from 'socket.io-client'
 
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
@@ -24,16 +22,6 @@ Vue.config.productionTip = false
 
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('http://127.0.0.1:9777/iron/webSocket'),
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  }
-})
-)
 
 new Vue({
   router,
