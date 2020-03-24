@@ -79,7 +79,8 @@ export default {
       this.connection()
     },
     connection () {
-      const socket = new SockJS('http://localhost:9777/iron/webSocket')
+      const socket = new SockJS('https://api.aimei66.cn/iron/webSocket')
+      // const socket = new SockJS('http://localhost:9777/iron/webSocket')
       this.stompClient = Stomp.over(socket)
       this.stompClient.connect({}, (frame) => {
         console.log(frame)
