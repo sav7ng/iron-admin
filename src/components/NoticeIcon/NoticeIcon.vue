@@ -83,7 +83,7 @@ export default {
       this.stompClient = Stomp.over(socket)
       this.stompClient.connect({}, (frame) => {
         console.log(frame)
-        this.stompClient.subscribe('/topic/news', (val) => {
+        this.stompClient.subscribe('/topic/subscribe', (val) => {
           console.log('-------++++++++++++++++++++++++++++++------------')
           console.log(val.body)
         })
