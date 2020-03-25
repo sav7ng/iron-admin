@@ -10,16 +10,15 @@
     :overlayStyle="{ width: '300px', top: '50px' }"
   >
     <template slot="content">
-      <a-spin :spinning="loading">
-        <a-tabs>
-          <a-tab-pane tab="通知" key="1">
-            <a-list>
-              <a-list-item>
-                <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
+      <a-tabs>
+        <a-tab-pane tab="通知" key="1">
+          <a-list>
+            <a-list-item v-for="(item, index) in messageList" :key="index">
+              <a-list-item-meta :title="item.message" :description="item.date">
+                <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
+              </a-list-item-meta>
+            </a-list-item>
+            <!-- <a-list-item>
                 <a-list-item-meta title="你推荐的 曲妮妮 已通过第三轮面试" description="一年前">
                   <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png"/>
                 </a-list-item-meta>
@@ -28,20 +27,24 @@
                 <a-list-item-meta title="这种模板可以区分多种通知类型" description="一年前">
                   <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png"/>
                 </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-          </a-tab-pane>
-          <a-tab-pane tab="消息" key="2">
-            123
-          </a-tab-pane>
-          <a-tab-pane tab="待办" key="3">
-            123
-          </a-tab-pane>
-        </a-tabs>
-      </a-spin>
+              </a-list-item> -->
+          </a-list>
+        </a-tab-pane>
+        <a-tab-pane tab="消息" key="2">
+          <a-list>
+          </a-list>
+        </a-tab-pane>
+        <a-button
+          slot="tabBarExtraContent"
+          type="primary"
+          :disabled="clean"
+          shape="round"
+          size="small"
+          @click="cleanMessage">清空</a-button>
+      </a-tabs>
     </template>
     <span @click="fetchNotice" class="header-notice" ref="noticeRef" style="padding: 0 18px">
-      <a-badge count="12">
+      <a-badge :count="messageCount">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -51,13 +54,16 @@
 <script>
 import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
+import moment from 'moment'
 export default {
   name: 'HeaderNotice',
   data () {
     return {
       loading: false,
       visible: false,
-      msg: ''
+      clean: true,
+      messageCount: 0,
+      messageList: []
     }
   },
   mounted () {
@@ -65,15 +71,16 @@ export default {
   },
   methods: {
     fetchNotice () {
-      if (!this.visible) {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-        }, 2000)
-      } else {
-        this.loading = false
-      }
+      // if (!this.visible) {
+      // this.loading = true
+      // setTimeout(() => {
+      //   this.loading = false
+      // }, 2000)
+      // } else {
+      // this.loading = false
+      // }
       this.visible = !this.visible
+      this.messageCount = 0
     },
     initWebSocket () {
       this.connection()
@@ -83,12 +90,29 @@ export default {
       // const socket = new SockJS('http://localhost:9777/iron/webSocket')
       this.stompClient = Stomp.over(socket)
       this.stompClient.connect({}, (frame) => {
-        console.log(frame)
+        // console.log(frame)
         this.stompClient.subscribe('/topic/subscribe', (val) => {
-          console.log('-------++++++++++++++++++++++++++++++------------')
-          console.log(val.body)
+          var subscribeData = JSON.parse(val.body)
+          var date = moment(subscribeData.data).format('YYYY-MM-DD HH:mm:ss')
+          subscribeData.date = date
+          this.messageList.unshift(subscribeData)
+          this.messageCount += 1
+          this.$notification.open({
+            message: '消息提醒',
+            icon: <a-icon type="message" theme="twoTone"/>,
+            description: subscribeData.message,
+            duration: 2,
+            placement: 'bottomRight'
+          })
+          if (this.messageList != null) {
+            this.clean = false
+          }
         })
       })
+    },
+    cleanMessage () {
+      this.messageList = []
+      this.clean = true
     }
   }
 }
