@@ -70,7 +70,7 @@ export default {
       background: #ffffff;
       // background-image: linear-gradient(-30deg,  #E3170D 0%, #FFD700 100%);
       background-size: 100%;
-      padding: 110px 0 144px;
+      // padding: 110px 0 144px;
       position: relative;
 
       a {
@@ -125,6 +125,7 @@ export default {
       }
 
       .footer {
+        z-index: 100;
         position: absolute;
         width: 100%;
         bottom: 0;
@@ -144,7 +145,8 @@ export default {
           }
         }
         .copyright {
-          color: rgba(0, 0, 0, 0.45);
+          // color: rgba(0, 0, 0, 0.45);
+          color: rgb(255, 255, 255);
           font-size: 14px;
         }
       }

@@ -1,81 +1,96 @@
 <template>
-
-  <div class="container-wrapper">
-    <div class="iron-logo animated fadeInUp">
-      <span>iRON</span>
+  <div class="homepage-hero-module">
+    <div class="video-container">
+      <div :style="fixStyle" class="filter"></div>
+      <video :style="fixStyle" autoplay loop class="fillWidth" @canplay="canplay">
+        <!-- <source src="../../assets/video/MP4/iron.mp4" type="video/mp4"/> -->
+        <source src="https://emmy-works.oss-cn-beijing.aliyuncs.com/admin/iron.mp4" type="video/mp4"/>
+        <!-- <source src="../../assets/video/WEBM/Coding.webm" type="video/webm"/> -->
+        <!-- 浏览器不支持 video 标签，建议升级浏览器。 -->
+      </video>
+      <div class="poster hidden" v-if="!vedioCanPlay">
+        <img :style="fixStyle" src="../../assets/video/Snapshots/iron.jpg" alt="">
+      </div>
     </div>
+
     <div
-      class="login-form animated"
-    >
-      <a-form
-        @keyup.enter.native="handleLogin"
+      class="container-wrapper">
+      <div class="iron-logo animated fadeInUp">
+        <span>iRON</span>
+      </div>
+      <div
+        class="login-form animated"
       >
-        <a-form-item
-          class="animated fadeInUp"
-          :style="{'animation-delay': '0.2s'}"
+        <a-form
+          @keyup.enter.native="handleLogin"
         >
-          <a-input
-            placeholder="用户名/邮箱"
-            v-model="username"
+          <a-form-item
+            class="animated fadeInUp"
+            :style="{'animation-delay': '0.2s'}"
           >
-            <a-icon
-              slot="prefix"
-              type="user"
-              style="color: rgba(0,0,0,.25)"
-            />
-          </a-input>
-        </a-form-item>
-        <a-form-item
-          class="animated fadeInUp"
-          :style="{'animation-delay': '0.4s'}"
-        >
-          <a-input
-            v-model="password"
-            type="password"
-            placeholder="密码"
-          >
-            <a-icon
-              slot="prefix"
-              type="lock"
-              style="color: rgba(0,0,0,.25)"
-            />
-          </a-input>
-        </a-form-item>
-
-        <a-row type="flex" justify="space-between">
-          <a-col>
-            <a-form-item
-              class="animated fadeInUp"
-              :style="{'animation-delay': '0.6s'}"
+            <a-input
+              placeholder="用户名/邮箱"
+              v-model="username"
             >
-              <a-switch
-                defaultChecked
-                v-model="rememberMe"
-                :style="{'animation-delay': '0.6s',
-                         'margin-right': '10px'}">
-                         <!-- <a-icon type="check" slot="checkedChildren" />
+              <a-icon
+                slot="prefix"
+                type="user"
+                style="color: rgba(0,0,0,.25)"
+              />
+            </a-input>
+          </a-form-item>
+          <a-form-item
+            class="animated fadeInUp"
+            :style="{'animation-delay': '0.4s'}"
+          >
+            <a-input
+              v-model="password"
+              type="password"
+              placeholder="密码"
+            >
+              <a-icon
+                slot="prefix"
+                type="lock"
+                style="color: rgba(0,0,0,.25)"
+              />
+            </a-input>
+          </a-form-item>
+
+          <a-row type="flex" justify="space-between">
+            <a-col>
+              <a-form-item
+                class="animated fadeInUp"
+                :style="{'animation-delay': '0.6s'}"
+              >
+                <a-switch
+                  defaultChecked
+                  v-model="rememberMe"
+                  :style="{'animation-delay': '0.6s',
+                           'margin-right': '10px'}">
+                           <!-- <a-icon type="check" slot="checkedChildren" />
                 <a-icon type="close" slot="unCheckedChildren" /> -->
-              </a-switch>
-              Remember Me
-            </a-form-item>
-          </a-col>
-        </a-row>
+                </a-switch>
+                Remember Me
+              </a-form-item>
+            </a-col>
+          </a-row>
 
-        <a-form-item
-          class="animated fadeInUp"
-          :style="{'animation-delay': '0.8s'}"
-        >
-          <a-button
-            :loading="landing"
-            type="primary"
-            :block="true"
-            @click="handleLogin"
-          >登录</a-button>
-        </a-form-item>
+          <a-form-item
+            class="animated fadeInUp"
+            :style="{'animation-delay': '0.8s'}"
+          >
+            <a-button
+              :loading="landing"
+              type="primary"
+              :block="true"
+              @click="handleLogin"
+            >登录</a-button>
+          </a-form-item>
 
-      </a-form>
+        </a-form>
+      </div>
+
     </div>
-
   </div>
 </template>
 
@@ -92,7 +107,9 @@ export default {
       username: null,
       password: null,
       landing: false,
-      rememberMe: true
+      rememberMe: true,
+      vedioCanPlay: false,
+      fixStyle: ''
     }
   },
   methods: {
@@ -161,8 +178,42 @@ export default {
         description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
         duration: 4
       })
+    },
+
+    canplay () {
+      this.vedioCanPlay = true
     }
 
+  },
+
+  mounted () {
+    window.onresize = () => {
+      const windowWidth = document.body.clientWidth
+      const windowHeight = document.body.clientHeight
+      const windowAspectRatio = windowHeight / windowWidth
+      let videoWidth
+      let videoHeight
+      if (windowAspectRatio < 0.5625) {
+        videoWidth = windowWidth
+        videoHeight = videoWidth * 0.5625
+        this.fixStyle = {
+          height: windowWidth * 0.5625 + 'px',
+          width: windowWidth + 'px',
+          'margin-bottom': (windowHeight - videoHeight) / 2 + 'px',
+          'margin-left': 'initial'
+        }
+      } else {
+        videoHeight = windowHeight
+        videoWidth = videoHeight / 0.5625
+        this.fixStyle = {
+          height: windowHeight + 'px',
+          width: windowHeight / 0.5625 + 'px',
+          'margin-left': (windowWidth - videoWidth) / 2 + 'px',
+          'margin-bottom': 'initial'
+        }
+      }
+    }
+    window.onresize()
   }
 
 }
@@ -214,4 +265,28 @@ export default {
     }
   }
 }
+
+.homepage-hero-module,
+  .video-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .video-container .poster img,
+  .video-container video {
+    z-index: 0;
+    position: absolute;
+  }
+
+  .video-container .filter {
+    z-index: 1;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .container-wrapper {
+    z-index: 10;
+    position: absolute;
+  }
 </style>
