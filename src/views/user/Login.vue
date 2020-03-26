@@ -3,8 +3,7 @@
     <div class="video-container">
       <div :style="fixStyle" class="filter"></div>
       <video :style="fixStyle" autoplay loop class="fillWidth" @canplay="canplay">
-        <!-- <source src="../../assets/video/MP4/iron.mp4" type="video/mp4"/> -->
-        <source src="https://emmy-works.oss-cn-beijing.aliyuncs.com/admin/iron.mp4" type="video/mp4"/>
+        <source src="../../assets/video/MP4/iron.mp4" type="video/mp4"/>
         <!-- <source src="../../assets/video/WEBM/Coding.webm" type="video/webm"/> -->
         <!-- 浏览器不支持 video 标签，建议升级浏览器。 -->
       </video>
