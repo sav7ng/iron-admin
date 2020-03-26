@@ -20,7 +20,7 @@
             :number="userTotal"
           >
             <router-link
-              :to="{ name:'BaseForm' }"
+              :to="{ name:'UserListWrapper' }"
               slot="action"
             >
               <a-icon type="link" />

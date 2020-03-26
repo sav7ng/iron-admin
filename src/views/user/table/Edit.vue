@@ -2,7 +2,7 @@
   <div>
     <a-form :form="form" @submit="handleSubmit">
 
-      <a-form-item
+      <!-- <a-form-item
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         label="规则编号"
@@ -17,7 +17,7 @@
           ]"
           :disabled="true"
         ></a-input>
-      </a-form-item>
+      </a-form-item> -->
 
       <!-- <a-form-item
         :labelCol="labelCol"

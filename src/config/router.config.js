@@ -19,29 +19,47 @@ export const asyncRouterMap = [
         component: RouteView,
         meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
-          {
-            path: '/dashboard/analysis',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', keepAlive: false, permission: [ 'dashboard' ] }
-          },
+          // {
+          //   path: '/dashboard/analysis',
+          //   name: 'Analysis',
+          //   component: () => import('@/views/dashboard/Analysis'),
+          //   meta: { title: '分析页', keepAlive: false, permission: [ 'dashboard' ] }
+          // },
           // 外部链接
-          {
-            path: 'https://www.baidu.com/',
-            name: 'Monitor',
-            meta: { title: '监控页（外部）', target: '_blank' }
-          },
+          // {
+          //   path: 'https://www.baidu.com/',
+          //   name: 'Monitor',
+          //   meta: { title: '监控页（外部）', target: '_blank' }
+          // },
+          // {
+          //   path: '/dashboard/test-work',
+          //   name: 'TestWork',
+          //   component: () => import('@/views/dashboard/TestWork'),
+          //   meta: { title: '测试功能', keepAlive: true, permission: [ 'dashboard' ] }
+          // },
           {
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
             meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
-          },
+          }
+        ]
+      },
+
+      // list
+      {
+        path: '/userlist',
+        name: 'userlist',
+        component: PageView,
+        redirect: '/userlist/table-list',
+        meta: { title: '用户管理', icon: 'team', permission: [ 'table' ] },
+        children: [
           {
-            path: '/dashboard/test-work',
-            name: 'TestWork',
-            component: () => import('@/views/dashboard/TestWork'),
-            meta: { title: '测试功能', keepAlive: true, permission: [ 'dashboard' ] }
+            path: '/userlist/table-list/:pageNo([1-9]\\d*)?',
+            name: 'UserListWrapper',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/user/UserList'),
+            meta: { title: '用户列表', keepAlive: true, permission: [ 'table' ] }
           }
         ]
       },
