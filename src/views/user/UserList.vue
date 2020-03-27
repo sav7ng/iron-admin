@@ -17,8 +17,10 @@
 
 <script>
 
+import { userFindAll } from '@/api/userList'
 import ATextarea from 'ant-design-vue/es/input/TextArea'
 import AInput from 'ant-design-vue/es/input/Input'
+// import axios from 'axios'
 
 // 动态切换组件
 // import List from '@/views/user/table/List'
@@ -82,6 +84,7 @@ export default {
     }
   },
   methods: {
+
     handleTableChange (pagination, filters, sorter) {
       console.log(pagination)
       const pager = { ...this.pagination }
@@ -99,16 +102,26 @@ export default {
       console.log('params:', params)
       this.loading = true
       // { params: { username: '18316260997' } }
-      this.$http.get('/admin/users/findAll').then(res => {
-        console.log(res)
-        this.pagination.total = res.data.totalElements
-        this.loading = false
-        this.data = res.data.content
-        console.log(this.loading)
-        // this.pagination = pagination
-      }, res => {
+      // axios.get().then().catch()
 
-      })
+      userFindAll({ username: '' }).then(response => {
+        console.log(response)
+        this.pagination.total = response.data.totalElements
+        this.loading = false
+        this.data = response.data.content
+        console.log(this.loading)
+      }).catch(response => {})
+
+      // this.$http.get('/admin/users/findAll').then(res => {
+      //   console.log(res)
+      //   this.pagination.total = res.data.totalElements
+      //   this.loading = false
+      //   this.data = res.data.content
+      //   console.log(this.loading)
+      //   // this.pagination = pagination
+      // }, res => {
+
+      // })
 
       // reqwest({
       //   url: 'https://randomuser.me/api',
