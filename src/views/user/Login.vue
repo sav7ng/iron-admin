@@ -1,16 +1,18 @@
 <template>
   <div class="homepage-hero-module">
-    <div class="video-container">
+    <!-- <div class="video-container">
       <div :style="fixStyle" class="filter"></div>
       <video :style="fixStyle" autoplay loop class="fillWidth" @canplay="canplay">
-        <source src="../../assets/video/MP4/iron.mp4" type="video/mp4"/>
-        <!-- <source src="../../assets/video/WEBM/Coding.webm" type="video/webm"/> -->
-        <!-- 浏览器不支持 video 标签，建议升级浏览器。 -->
-      </video>
+        <source src="../../assets/video/MP4/iron.mp4" type="video/mp4"/> -->
+    <!-- <source src="../../assets/video/WEBM/Coding.webm" type="video/webm"/> -->
+    <!-- 浏览器不支持 video 标签，建议升级浏览器。 -->
+    <!-- </video>
       <div class="poster hidden" v-if="!vedioCanPlay">
         <img :style="fixStyle" src="../../assets/video/Snapshots/iron.jpg" alt="">
       </div>
-    </div>
+    </div> -->
+
+    <div class="animation-background"></div>
 
     <div
       class="container-wrapper">
@@ -266,26 +268,51 @@ export default {
 }
 
 .homepage-hero-module,
-  .video-container {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-  }
+.video-container {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  .video-container .poster img,
-  .video-container video {
-    z-index: 0;
-    position: absolute;
-  }
+.video-container .poster img,
+.video-container video {
+  z-index: 0;
+  position: absolute;
+}
 
-  .video-container .filter {
-    z-index: 1;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.4);
-  }
+.video-container .filter {
+  z-index: 1;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
+}
 
-  .container-wrapper {
-    z-index: 10;
-    position: absolute;
+.container-wrapper {
+  z-index: 10;
+  position: absolute;
+}
+
+.animation-background {
+  background: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab);
+  background-size: 400% 400%;
+  position: absolute;
+  animation: Gradient 10s ease infinite;
+  -webkit-animation: Gradient 10s ease infinite;
+  -moz-animation: Gradient 10s ease infinite;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes Gradient
+{
+  0% {
+    background-position: 0% 50%
   }
+  50% {
+    background-position: 100% 50%
+  }
+  100% {
+    background-position: 0% 50%
+  }
+}
+
 </style>

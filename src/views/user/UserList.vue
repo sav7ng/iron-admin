@@ -1,147 +1,307 @@
 <template>
-  <a-card :bordered="false">
-    <!-- <component @onEdit="handleEdit" @onGoBack="handleGoBack" :record="record" :is="currentComponet"></component> -->
-    <div>
-      <span>iRON</span>
-    </div>
-    <a-table
-      bordered
-      :columns="columns"
-      :dataSource="data"
-      :components="components"
-    >
-      <a slot="name" slot-scope="text">{{ text }}</a>
-    </a-table>
-  </a-card>
+
+  <a-row>
+    <a-col :style="{ marginBottom: '16px' }">
+      <a-card :bordered="false" class="table-page-search-wrapper" >
+        <a-form layout="inline">
+          <a-row :gutter="24" type="flex" align="middle" justify="center">
+            <a-col
+              :md="10"
+              :sm="24"
+            >
+              <a-form-item label="手机号">
+                <a-input v-model="queryParam.username"></a-input>
+              </a-form-item>
+            </a-col>
+
+            <a-col
+              :md="10"
+              :sm="24"
+            >
+              <a-form-item label="用户名">
+                <a-input v-model="queryParam.nickName"></a-input>
+              </a-form-item>
+            </a-col>
+
+            <a-col
+              :md="4"
+              :sm="24"
+            >
+              <a-button
+                type="primary"
+                @click="handleQuery()"
+                :style="{ marginRight: '16px' }">
+                搜索
+              </a-button>
+              <a-button
+                @click="resetQuery()">
+                重置
+              </a-button>
+            </a-col>
+          </a-row>
+        </a-form>
+      </a-card>
+    </a-col>
+
+    <a-col>
+      <a-card
+        :bordered="false">
+        <a-table
+          :columns="columns"
+          :dataSource="data"
+          :rowKey="record => record.id"
+          :loading="loading"
+          :pagination="pagination"
+          @change="handleTableChange(pagination)">
+          <span slot="datalevel" slot-scope="datalevel">
+            <a-tag :color="datalevel === 'EFFECTIVE' ? '#87d068' : '#f5222d'">
+              {{ datalevel === 'EFFECTIVE' ? '有效' : '无效' }}
+            </a-tag>
+          </span>
+          <span slot="nickName" slot-scope="nickName">
+            {{ nickName == null ? '空' : nickName }}
+          </span>
+          <span slot="createTime" slot-scope="createTime">
+            {{ createTime | formatDate }}
+          </span>
+          <span slot="updateTime" slot-scope="updateTime">
+            {{ updateTime | formatDate }}
+          </span>
+          <span slot="roles" slot-scope="roles">
+            <div v-for="(role, index) in roles" :key="index">
+              <a-tag
+                v-if="role.authority.slice(5) === 'USER'"
+                color="cyan"
+                :style=" index > 0 ? { marginTop: '8px' } : ''">
+                {{ role.authority.slice(5) === 'USER' ? '用户' : '' }}
+              </a-tag>
+              <a-tag
+                color="pink"
+                v-else-if="role.authority.slice(5) === 'MODEL'"
+                :style=" index > 0 ? { marginTop: '8px' } : ''">
+                {{ role.authority.slice(5) === 'MODEL' ? '模特' : '' }}
+              </a-tag>
+              <a-tag
+                color="purple"
+                v-else-if="role.authority.slice(5) === 'PHOTO'"
+                :style=" index > 0 ? { marginTop: '8px' } : ''">
+                {{ role.authority.slice(5) === 'PHOTO' ? '摄影师' : '' }}
+              </a-tag>
+
+            </div>
+          </span>
+          <span slot="action" slot-scope="action, record">
+            <a-button type="primary" @click="getInfo(record.id)" :style="{ marginRight: '16px' }">详情</a-button>
+            <a-tooltip placement="topLeft" title="封禁后用户无法登录" arrowPointAtCenter v-if="record.datalevel === 'EFFECTIVE'">
+              <a-button type="danger" @click="banUserById(record.id, 'UNEFFECTIVE')">封禁</a-button>
+            </a-tooltip>
+            <a-button v-else @click="banUserById(record.id, 'EFFECTIVE')" class="unblock">解封</a-button>
+          </span>
+        </a-table>
+      </a-card>
+    </a-col>
+
+    <a-drawer
+      width="640"
+      :placement="placement"
+      :closable="false"
+      @close="onClose"
+      :visible="visible">
+      <p :style="[pStyle]">用户详情</p>
+      <p>{{ userInfo.data }}</p>
+    </a-drawer>
+  </a-row>
+
 </template>
 
 <script>
 
-import { userFindAll } from '@/api/userList'
-import ATextarea from 'ant-design-vue/es/input/TextArea'
-import AInput from 'ant-design-vue/es/input/Input'
-// import axios from 'axios'
+import { userFindAll, banUserById, getUserInfoById } from '@/api/userList'
+import moment from 'moment'// 可以不用use
 
-// 动态切换组件
-// import List from '@/views/user/table/List'
-// import Edit from '@/views/user/table/Edit'
 const columns = [
   {
-    title: '用户ID',
+    title: 'ID',
     dataIndex: 'id',
-    // sorter: true,
-    width: '5%'
-    // scopedSlots: { customRender: 'name' }
-  },
-  {
-    title: '手机号码',
-    dataIndex: 'username',
-    // sorter: true,
-    width: '20%'
-  },
-  {
-    title: '是否有效',
-    dataIndex: 'datalevel',
-    // sorter: true,
-    width: '20%'
+    width: '5%',
+    align: 'center'
   },
   {
     title: '用户名',
     dataIndex: 'nickName',
-    // sorter: true,
-    width: '20%'
+    width: '10%',
+    align: 'center',
+    scopedSlots: { customRender: 'nickName' }
+  },
+  {
+    title: '手机号码',
+    dataIndex: 'username',
+    width: '15%',
+    align: 'center'
+  },
+  {
+    title: '注册时间',
+    dataIndex: 'createTime',
+    width: '15%',
+    align: 'center',
+    scopedSlots: { customRender: 'createTime' }
+  },
+  {
+    title: '最近登录时间',
+    dataIndex: 'updateTime',
+    width: '15%',
+    align: 'center',
+    scopedSlots: { customRender: 'updateTime' }
+  },
+  {
+    title: '角色',
+    dataIndex: 'roles',
+    width: '10%',
+    align: 'center',
+    scopedSlots: { customRender: 'roles' }
+  },
+  {
+    title: '是否有效',
+    key: 'datalevel',
+    dataIndex: 'datalevel',
+    width: '10%',
+    align: 'center',
+    scopedSlots: { customRender: 'datalevel' }
+  },
+  {
+    title: '操作',
+    key: 'action',
+    dataIndex: 'action',
+    width: '20%',
+    align: 'center',
+    scopedSlots: { customRender: 'action' }
   }
-  // ,
-  // {
-  //   title: 'Gender',
-  //   dataIndex: 'id',
-  //   filters: [{ text: 'Male', value: 'male' }, { text: 'Female', value: 'female' }],
-  //   width: '20%'
-  // },
-  // {
-  //   title: 'Email',
-  //   dataIndex: 'email'
-  // }
 ]
 
 export default {
+  filters: {
+    formatDate (time) {
+      return moment(time).format('YYYY-MM-DD hh:mm')
+    }
+  },
   name: 'UserListWrapper',
   components: {
-    AInput,
-    ATextarea
-    // List,
-    // Edit
+    moment
   },
   mounted () {
-    this.fetch()
+    this.fetch(this.queryParam)
   },
   data () {
     return {
+      pStyle: {
+        fontSize: '18px',
+        color: 'rgba(0,0,0,0.85)',
+        lineHeight: '24px',
+        display: 'block',
+        marginBottom: '16px',
+        fontWeight: 'bold'
+      },
+      columns,
       data: [],
-      pagination: {},
       loading: false,
-      columns
+      visible: false,
+      placement: 'left',
+      pagination: {
+        current: 1,
+        total: 0,
+        pageSize: 0,
+        pageSizeOptions: ['2', '5', '10', '20', '30', '40', '50'],
+        showSizeChanger: true,
+        showTotal: (count = this.pagination.total) => {
+          return '总共 ' + count + ' 条数据'
+        },
+        onChange: (current, pageSize) => {
+          this.pagination.current = current
+          this.pagination.pageSize = pageSize
+        },
+        onShowSizeChange: (current, pageSize) => {
+          this.pagination.current = current
+          this.pagination.pageSize = pageSize
+        }
+      },
+      queryParam: {
+        username: null,
+        nickName: null,
+        page: null,
+        size: null
+      },
+      banUserParam: {
+        userId: null,
+        datalevel: null
+      },
+      userInfo: {
+        data: null
+      }
     }
   },
   methods: {
 
-    handleTableChange (pagination, filters, sorter) {
-      console.log(pagination)
-      const pager = { ...this.pagination }
-      pager.current = pagination.current
-      this.pagination = pager
-      this.fetch({
-        results: pagination.pageSize,
-        page: pagination.current,
-        sortField: sorter.field,
-        sortOrder: sorter.order,
-        ...filters
-      })
+    handleQuery () {
+      // console.log(this.queryParam)
+      this.fetch(this.queryParam)
     },
-    fetch (params = {}) {
-      console.log('params:', params)
-      this.loading = true
-      // { params: { username: '18316260997' } }
-      // axios.get().then().catch()
 
-      userFindAll({ username: '' }).then(response => {
-        console.log(response)
+    handleTableChange (pagination, filters, sorter) {
+      this.pagination.current = pagination.current
+      this.queryParam.page = pagination.current - 1
+      this.queryParam.size = pagination.pageSize
+      this.fetch(this.queryParam)
+    },
+
+    fetch (params = {}) {
+      // console.log('params:', params)
+      this.loading = true
+      userFindAll(params).then(response => {
         this.pagination.total = response.data.totalElements
+        this.pagination.current = response.data.number + 1
+        this.pagination.pageSize = response.data.size
         this.loading = false
         this.data = response.data.content
-        console.log(this.loading)
       }).catch(response => {})
+    },
 
-      // this.$http.get('/admin/users/findAll').then(res => {
-      //   console.log(res)
-      //   this.pagination.total = res.data.totalElements
-      //   this.loading = false
-      //   this.data = res.data.content
-      //   console.log(this.loading)
-      //   // this.pagination = pagination
-      // }, res => {
+    resetQuery () {
+      this.queryParam.username = null
+      this.queryParam.nickName = null
+      this.fetch(this.queryParam)
+    },
 
-      // })
+    getInfo (e) {
+      getUserInfoById({ userId: e }).then(response => {
+        console.log(response)
+        this.userInfo.data = response.data
+      }).catch(response => {})
+      this.visible = true
+    },
+    onClose () {
+      this.visible = false
+    },
+    onChange (e) {
+      this.placement = e.target.value
+    },
 
-      // reqwest({
-      //   url: 'https://randomuser.me/api',
-      //   method: 'get',
-      //   data: {
-      //     results: 10,
-      //     ...params
-      //   },
-      //   type: 'json'
-      // }).then(data => {
-      //   const pagination = { ...this.pagination }
-      //   // Read total count from server
-      //   // pagination.total = data.totalCount;
-      //   pagination.total = 200
-      //   this.loading = false
-      //   this.data = data.results
-      //   this.pagination = pagination
-      // })
+    banUserById (...value) {
+      this.banUserParam.userId = value[0]
+      this.banUserParam.datalevel = value[1]
+      banUserById(this.banUserParam).then(response => {
+        if (this.banUserParam.datalevel === 'UNEFFECTIVE') {
+          this.$message.error('封禁成功')
+        } else {
+          this.$message.success('解封成功')
+        }
+        this.fetch(this.queryParam)
+      }).catch(response => {})
     }
+
   }
 
 }
 </script>
+
+<style lang="less" scoped>
+</style>

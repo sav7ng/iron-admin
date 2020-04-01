@@ -7,3 +7,22 @@ export function userFindAll (parameter) {
     params: parameter
   })
 }
+
+export function banUserById (parameter) {
+  return axios({
+    url: '/admin/users/banUserById',
+    method: 'delete',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function getUserInfoById (parameter) {
+  return axios({
+    url: '/admin/users/getUserInfoById',
+    method: 'get',
+    params: parameter
+  })
+}
