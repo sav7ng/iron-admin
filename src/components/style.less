@@ -21,15 +21,33 @@
             font-weight: 600;
             color: #1790fe;
             // background-image: linear-gradient(-20deg,  #cf1322 0%, #EFE452 100%);
-            background-image: linear-gradient(-20deg,  #E3170D 0%, #FFD700 100%);
+            background-image: linear-gradient(-45deg,#ee7752,#ce3e75,#23a6d5,#23d5ab);
             -webkit-text-fill-color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
+
+            background-size: 400% 400%;
+            animation: Gradient 10s ease infinite;
+            -webkit-animation: Gradient 10s ease infinite;
+            -moz-animation: Gradient 10s ease infinite;
 
             small {
                 margin-left: 5px;
                 font-size: 35%;
             }
+        }
+    }
+
+    @keyframes Gradient
+    {
+        0% {
+            background-position: 0% 50%
+        }
+        50% {
+            background-position: 100% 50%
+        }
+        100% {
+            background-position: 0% 50%
         }
     }
 
