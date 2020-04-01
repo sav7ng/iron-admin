@@ -62,7 +62,6 @@ export default {
         content: '真的要注销登录吗 ?',
         onOk: () => {
           return this.Logout({}).then(() => {
-            this.$router.replace({ path: '/user' })
             this.$notification.success({
               message: '提示',
               description: `退出成功`,
@@ -73,6 +72,8 @@ export default {
               title: '错误',
               description: err.message
             })
+          }).finally(() => {
+            this.$router.replace({ path: '/user' })
           })
         },
         onCancel () {
